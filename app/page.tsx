@@ -1,4 +1,4 @@
-"use client"; // Pastikan ini ada karena menggunakan hooks dan framer-motion
+"use client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
@@ -18,9 +18,9 @@ import {
   Globe,
   Sun,
   Moon,
-} from "lucide-react";
+} from "lucide-react"; // Removed Menu, X
 import Link from "next/link";
-import { motion } from "framer-motion"; // Import motion dari framer-motion
+import { motion } from "framer-motion"; // Removed AnimatePresence
 import { useState, useEffect } from "react";
 
 // Data UMKM per dusun
@@ -291,9 +291,9 @@ const umkmData = [
 
 export default function UMKMKebonagungLanding() {
   const [isDarkMode, setIsDarkMode] = useState(true);
+  // Removed isMobileMenuOpen state
 
   useEffect(() => {
-    // Check for saved theme preference or default to dark mode
     const savedTheme = localStorage.getItem("theme");
     if (savedTheme) {
       setIsDarkMode(savedTheme === "dark");
@@ -305,6 +305,8 @@ export default function UMKMKebonagungLanding() {
     setIsDarkMode(newTheme);
     localStorage.setItem("theme", newTheme ? "dark" : "light");
   };
+
+  // Removed toggleMobileMenu and closeMobileMenu functions
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -350,97 +352,102 @@ export default function UMKMKebonagungLanding() {
     },
   };
 
+  const navItems = [
+    { href: "#beranda", label: "Beranda" },
+    { href: "#umkm", label: "UMKM" },
+    { href: "#peta", label: "Peta Desa" },
+    { href: "#testimonials", label: "Testimoni" },
+    { href: "#kontak", label: "Kontak" },
+  ];
+
   return (
     <div
-      className={`min-h-screen ${themeClasses.bg} ${themeClasses.text} transition-colors duration-300`}
+      className={`min-h-screen ${themeClasses.bg} ${themeClasses.text} transition-colors duration-300 overflow-x-hidden`}
     >
-      {/* Navigation */}
+      {/* Navigation - Fully Responsive */}
       <nav
         className={`fixed top-0 w-full z-50 ${themeClasses.nav} backdrop-blur-md border-b ${themeClasses.navBorder} transition-colors duration-300`}
       >
-        <div className="container mx-auto px-4 py-3 md:py-4 flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <div className="w-7 h-7 md:w-8 md:h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">K</span>
+        <div className="w-full px-4 sm:px-6 lg:px-8 py-3 lg:py-4">
+          <div className="flex items-center justify-between">
+            {/* Logo - Responsive */}
+            <div className="flex items-center space-x-2 sm:space-x-3">
+              <div className="w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-sm sm:text-base">
+                  K
+                </span>
+              </div>
+              <span
+                className={`font-bold text-lg sm:text-xl lg:text-2xl ${themeClasses.text}`}
+              >
+                Kebonagung
+              </span>
             </div>
-            <span
-              className={`font-bold text-lg md:text-xl ${themeClasses.text}`}
-            >
-              Kebonagung
-            </span>
-          </div>
-          <div className="flex items-center space-x-4">
-            <div className="hidden lg:flex items-center space-x-8">
-              <Link
-                href="#beranda"
-                className={`hover:text-blue-400 transition-colors text-sm md:text-base ${themeClasses.text}`}
-              >
-                Beranda
-              </Link>
-              <Link
-                href="#umkm"
-                className={`hover:text-blue-400 transition-colors text-sm md:text-base ${themeClasses.text}`}
-              >
-                UMKM
-              </Link>
-              <Link
-                href="#peta"
-                className={`hover:text-blue-400 transition-colors text-sm md:text-base ${themeClasses.text}`}
-              >
-                Peta Desa
-              </Link>
-              <Link
-                href="#testimonials"
-                className={`hover:text-blue-400 transition-colors text-sm md:text-base ${themeClasses.text}`}
-              >
-                Testimoni
-              </Link>
-              <Link
-                href="#kontak"
-                className={`hover:text-blue-400 transition-colors text-sm md:text-base ${themeClasses.text}`}
-              >
-                Kontak
-              </Link>
+
+            {/* Desktop Navigation */}
+            <div className="hidden lg:flex items-center space-x-8 xl:space-x-10">
+              {navItems.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`hover:text-blue-400 transition-colors text-base xl:text-lg ${themeClasses.text}`}
+                >
+                  {item.label}
+                </Link>
+              ))}
             </div>
-            {/* Theme Toggle Button */}
-            <Button
-              onClick={toggleTheme}
-              variant="outline"
-              size="sm"
-              className={`${
-                isDarkMode
-                  ? "border-gray-600 hover:bg-gray-700"
-                  : "border-gray-300 hover:bg-gray-100"
-              } transition-colors duration-300`}
-            >
-              {isDarkMode ? (
-                <Sun className="w-4 h-4" />
-              ) : (
-                <Moon className="w-4 h-4" />
-              )}
-            </Button>
+
+            {/* Right side buttons - Responsive */}
+            <div className="flex items-center space-x-2 sm:space-x-3">
+              {/* Desktop Theme Toggle Button */}
+              <Button
+                onClick={toggleTheme}
+                variant="outline"
+                size="sm"
+                className={`hidden lg:flex ${
+                  isDarkMode
+                    ? "border-gray-600 hover:bg-gray-700"
+                    : "border-gray-300 hover:bg-gray-100"
+                } transition-colors duration-300 p-2 lg:p-3`}
+              >
+                {isDarkMode ? (
+                  <Sun className="w-4 h-4 lg:w-5 lg:h-5" />
+                ) : (
+                  <Moon className="w-4 h-4 lg:w-5 lg:h-5" />
+                )}
+              </Button>
+
+              {/* Removed Mobile Menu Button */}
+            </div>
           </div>
+
+          {/* Removed Mobile Navigation Menu - Enhanced */}
         </div>
       </nav>
 
-      {/* Village Profile Section */}
-      <section id="beranda" className="py-20">
-        <div className="container mx-auto px-4">
+      {/* Village Profile Section - Fully Responsive */}
+      <section
+        id="beranda"
+        className="pt-20 sm:pt-24 lg:pt-28 pb-12 sm:pb-16 lg:pb-20"
+      >
+        <div className="w-full px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.5 }}
             variants={containerVariants}
-            className="text-center mb-16"
+            className="text-center mb-12 sm:mb-16 lg:mb-20"
           >
             <motion.div variants={itemVariants}>
-              <Badge className={`mb-4 ${themeClasses.badge.green}`}>
+              <Badge
+                className={`mb-6 sm:mb-8 ${themeClasses.badge.green} text-sm sm:text-base px-4 py-2 sm:px-6 sm:py-3`}
+              >
                 🏘️ Profil Desa
               </Badge>
             </motion.div>
             <motion.h2
               variants={itemVariants}
-              className={`text-3xl md:text-5xl font-bold mb-6 ${themeClasses.text}`}
+              className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-6 sm:mb-8 ${themeClasses.text} leading-tight`}
             >
               Mengenal Lebih Dekat
               <br />
@@ -450,7 +457,7 @@ export default function UMKMKebonagungLanding() {
             </motion.h2>
             <motion.p
               variants={itemVariants}
-              className={`text-lg md:text-xl ${themeClasses.textSecondary} max-w-3xl mx-auto`}
+              className={`text-base sm:text-lg md:text-xl lg:text-2xl ${themeClasses.textSecondary} max-w-4xl mx-auto leading-relaxed px-4 sm:px-0`}
             >
               Desa Kebonagung adalah desa yang kaya akan potensi UMKM dengan
               masyarakat yang kreatif dan inovatif. Dengan 22 UMKM yang tersebar
@@ -459,51 +466,56 @@ export default function UMKMKebonagungLanding() {
               berkelanjutan.
             </motion.p>
           </motion.div>
-          <div className="grid lg:grid-cols-2 gap-12 items-center mb-16">
+
+          <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 items-center mb-12 sm:mb-16 lg:mb-20">
             <motion.div
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, amount: 0.5 }}
               variants={containerVariants}
-              className="space-y-6"
+              className="space-y-6 sm:space-y-8 order-2 lg:order-1"
             >
               <motion.h3
                 variants={itemVariants}
-                className={`text-2xl md:text-3xl font-bold ${themeClasses.text}`}
+                className={`text-2xl sm:text-3xl lg:text-4xl font-bold ${themeClasses.text}`}
               >
                 Visi & Misi Desa
               </motion.h3>
-              <div className="space-y-4">
+              <div className="space-y-4 sm:space-y-6">
                 <motion.div
                   variants={itemVariants}
-                  className={`${themeClasses.card} p-6 rounded-lg transition-colors duration-300`}
+                  className={`${themeClasses.card} p-6 sm:p-8 rounded-xl transition-colors duration-300`}
                 >
-                  <h4 className="text-xl font-semibold text-blue-400 mb-3">
+                  <h4 className="text-xl sm:text-2xl font-semibold text-blue-400 mb-4 sm:mb-6">
                     Visi
                   </h4>
-                  <p className={themeClasses.textSecondary}>
+                  <p
+                    className={`${themeClasses.textSecondary} text-base sm:text-lg leading-relaxed`}
+                  >
                     Menjadi desa mandiri dan sejahtera melalui pengembangan UMKM
                     yang berkelanjutan dan berbasis teknologi digital.
                   </p>
                 </motion.div>
                 <motion.div
                   variants={itemVariants}
-                  className={`${themeClasses.card} p-6 rounded-lg transition-colors duration-300`}
+                  className={`${themeClasses.card} p-6 sm:p-8 rounded-xl transition-colors duration-300`}
                 >
-                  <h4 className="text-xl font-semibold text-purple-400 mb-3">
+                  <h4 className="text-xl sm:text-2xl font-semibold text-purple-400 mb-4 sm:mb-6">
                     Misi
                   </h4>
-                  <ul className={`${themeClasses.textSecondary} space-y-2`}>
+                  <ul
+                    className={`${themeClasses.textSecondary} space-y-3 sm:space-y-4 text-base sm:text-lg`}
+                  >
                     <li className="flex items-start">
-                      <CheckCircle className="w-5 h-5 text-green-400 mr-3 mt-0.5 flex-shrink-0" />
+                      <CheckCircle className="w-6 h-6 sm:w-7 sm:h-7 text-green-400 mr-3 sm:mr-4 mt-1 flex-shrink-0" />
                       Memberdayakan masyarakat melalui pengembangan UMKM lokal
                     </li>
                     <li className="flex items-start">
-                      <CheckCircle className="w-5 h-5 text-green-400 mr-3 mt-0.5 flex-shrink-0" />
+                      <CheckCircle className="w-6 h-6 sm:w-7 sm:h-7 text-green-400 mr-3 sm:mr-4 mt-1 flex-shrink-0" />
                       Meningkatkan kualitas produk dan layanan UMKM
                     </li>
                     <li className="flex items-start">
-                      <CheckCircle className="w-5 h-5 text-green-400 mr-3 mt-0.5 flex-shrink-0" />
+                      <CheckCircle className="w-6 h-6 sm:w-7 sm:h-7 text-green-400 mr-3 sm:mr-4 mt-1 flex-shrink-0" />
                       Mengintegrasikan teknologi digital dalam pemasaran
                     </li>
                   </ul>
@@ -515,30 +527,31 @@ export default function UMKMKebonagungLanding() {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true, amount: 0.5 }}
               transition={{ duration: 0.6 }}
-              className="relative"
+              className="relative order-1 lg:order-2"
             >
               <img
                 src="/images/kantor-desa-kebonagung.jpeg"
                 alt="Peta Desa Kebonagung, Kecamatan Tegalrejo, Kabupaten Magelang"
-                className="w-full h-64 md:h-80 lg:h-96 object-cover rounded-2xl shadow-2xl"
+                className="w-full h-64 sm:h-80 md:h-96 lg:h-[500px] xl:h-[600px] object-cover rounded-2xl shadow-2xl"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent rounded-2xl"></div>
-              <div className="absolute bottom-6 left-6 text-white">
-                <h4 className="text-lg md:text-xl font-bold">
+              <div className="absolute bottom-6 sm:bottom-8 left-6 sm:left-8 text-white">
+                <h4 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-2">
                   Peta Desa Kebonagung
                 </h4>
-                <p className="text-sm md:text-base text-gray-200">
+                <p className="text-base sm:text-lg text-gray-200">
                   Lokasi dan batas wilayah desa
                 </p>
               </div>
             </motion.div>
           </div>
+
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.5 }}
             variants={containerVariants}
-            className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12"
+            className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 mb-12 sm:mb-16"
           >
             {[
               {
@@ -574,20 +587,21 @@ export default function UMKMKebonagungLanding() {
                 <img
                   src={item.src || "/placeholder.svg"}
                   alt={item.alt}
-                  className="w-full h-48 sm:h-56 object-cover transition-transform duration-300 group-hover:scale-110"
+                  className="w-full h-40 sm:h-48 md:h-56 lg:h-64 object-cover transition-transform duration-300 group-hover:scale-110"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-                <div className="absolute bottom-4 left-4 text-white">
-                  <h4 className="font-bold text-sm md:text-base">
+                <div className="absolute bottom-3 sm:bottom-4 left-3 sm:left-4 text-white">
+                  <h4 className="font-bold text-sm sm:text-base lg:text-lg">
                     {item.title}
                   </h4>
-                  <p className="text-xs md:text-sm text-gray-200">
+                  <p className="text-xs sm:text-sm text-gray-200 hidden sm:block">
                     {item.desc}
                   </p>
                 </div>
               </motion.div>
             ))}
           </motion.div>
+
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
@@ -597,33 +611,35 @@ export default function UMKMKebonagungLanding() {
               isDarkMode
                 ? "bg-gradient-to-r from-green-900/30 to-blue-900/30"
                 : "bg-gradient-to-r from-green-100 to-blue-100"
-            } rounded-2xl p-6 md:p-8 transition-colors duration-300`}
+            } rounded-2xl p-6 sm:p-8 lg:p-12 transition-colors duration-300`}
           >
-            <div className="grid md:grid-cols-3 gap-6 md:gap-8">
+            <div className="grid grid-cols-3 gap-6 sm:gap-8 lg:gap-12">
               <div className="text-center">
-                <div className="text-3xl md:text-4xl font-bold text-green-400 mb-2">
+                <div className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-green-400 mb-2 sm:mb-4">
                   500+
                 </div>
                 <div
-                  className={`${themeClasses.textSecondary} text-sm md:text-base`}
+                  className={`${themeClasses.textSecondary} text-sm sm:text-base lg:text-lg`}
                 >
                   Kepala Keluarga
                 </div>
               </div>
               <div className="text-center">
-                <div className="text-3xl md:text-4xl font-bold text-blue-400 mb-2">
+                <div className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-blue-400 mb-2 sm:mb-4">
                   22+
                 </div>
                 <div
-                  className={`${themeClasses.textSecondary} text-sm md:text-base`}
+                  className={`${themeClasses.textSecondary} text-sm sm:text-base lg:text-lg`}
                 >
                   UMKM Aktif
                 </div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-purple-400 mb-2">7</div>
+                <div className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-purple-400 mb-2 sm:mb-4">
+                  7
+                </div>
                 <div
-                  className={`${themeClasses.textSecondary} text-sm md:text-base`}
+                  className={`${themeClasses.textSecondary} text-sm sm:text-base lg:text-lg`}
                 >
                   Dusun Terlayani
                 </div>
@@ -633,26 +649,28 @@ export default function UMKMKebonagungLanding() {
         </div>
       </section>
 
-      {/* Features Section */}
+      {/* Features Section - Fully Responsive */}
       <section
-        className={`py-20 ${themeClasses.section} transition-colors duration-300`}
+        className={`py-12 sm:py-16 lg:py-20 ${themeClasses.section} transition-colors duration-300`}
       >
-        <div className="container mx-auto px-4">
+        <div className="w-full px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.5 }}
             variants={containerVariants}
-            className="text-center mb-16"
+            className="text-center mb-12 sm:mb-16 lg:mb-20"
           >
             <motion.div variants={itemVariants}>
-              <Badge className={`mb-4 ${themeClasses.badge.blue}`}>
+              <Badge
+                className={`mb-6 sm:mb-8 ${themeClasses.badge.blue} text-sm sm:text-base px-4 py-2 sm:px-6 sm:py-3`}
+              >
                 ✨ Fitur Unggulan
               </Badge>
             </motion.div>
             <motion.h2
               variants={itemVariants}
-              className={`text-4xl md:text-5xl font-bold mb-6 ${themeClasses.text}`}
+              className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 sm:mb-8 ${themeClasses.text} leading-tight`}
             >
               Platform Yang
               <br />
@@ -660,7 +678,7 @@ export default function UMKMKebonagungLanding() {
             </motion.h2>
             <motion.p
               variants={itemVariants}
-              className={`text-xl ${themeClasses.textSecondary} max-w-2xl mx-auto`}
+              className={`text-base sm:text-lg md:text-xl lg:text-2xl ${themeClasses.textSecondary} max-w-4xl mx-auto px-4 sm:px-0`}
             >
               Solusi lengkap untuk mengembangkan UMKM dengan teknologi terdepan
               dan strategi pemasaran yang terbukti efektif.
@@ -671,7 +689,7 @@ export default function UMKMKebonagungLanding() {
             whileInView="visible"
             viewport={{ once: true, amount: 0.5 }}
             variants={containerVariants}
-            className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-10"
           >
             {[
               {
@@ -704,26 +722,28 @@ export default function UMKMKebonagungLanding() {
             ].map((item, index) => (
               <motion.div key={index} variants={itemVariants}>
                 <Card
-                  className={`${themeClasses.card} ${themeClasses.cardHover} transition-all duration-300`}
+                  className={`${themeClasses.card} ${themeClasses.cardHover} transition-all duration-300 h-full`}
                 >
-                  <CardContent className="p-8">
+                  <CardContent className="p-6 sm:p-8 lg:p-10">
                     <div
-                      className={`w-12 h-12 ${item.color} rounded-lg flex items-center justify-center mb-6`}
+                      className={`w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 ${item.color} rounded-lg flex items-center justify-center mb-6 sm:mb-8`}
                     >
-                      <item.icon className="w-6 h-6 text-white" />
+                      <item.icon className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-white" />
                     </div>
                     <h3
-                      className={`text-xl font-bold mb-4 ${themeClasses.text}`}
+                      className={`text-xl sm:text-2xl lg:text-3xl font-bold mb-4 sm:mb-6 ${themeClasses.text}`}
                     >
                       {item.title}
                     </h3>
-                    <p className={`${themeClasses.textSecondary} mb-4`}>
+                    <p
+                      className={`${themeClasses.textSecondary} mb-4 sm:mb-6 text-base sm:text-lg leading-relaxed`}
+                    >
                       {item.description}
                     </p>
                     <div
-                      className={`flex items-center ${item.featureColor} text-sm font-medium`}
+                      className={`flex items-center ${item.featureColor} text-sm sm:text-base font-medium`}
                     >
-                      <CheckCircle className="w-4 h-4 mr-2" />
+                      <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3" />
                       {item.feature}
                     </div>
                   </CardContent>
@@ -734,19 +754,19 @@ export default function UMKMKebonagungLanding() {
         </div>
       </section>
 
-      {/* UMKM Showcase by Dusun */}
-      <section id="umkm" className="py-20">
-        <div className="container mx-auto px-4">
+      {/* UMKM Showcase by Dusun - Fully Responsive */}
+      <section id="umkm" className="py-12 sm:py-16 lg:py-20">
+        <div className="w-full px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.5 }}
             variants={containerVariants}
-            className="text-center mb-16"
+            className="text-center mb-12 sm:mb-16 lg:mb-20"
           >
             <motion.h2
               variants={itemVariants}
-              className={`text-4xl md:text-5xl font-bold mb-6 ${themeClasses.text}`}
+              className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 sm:mb-8 ${themeClasses.text} leading-tight`}
             >
               UMKM di 7 Dusun
               <br />
@@ -754,7 +774,7 @@ export default function UMKMKebonagungLanding() {
             </motion.h2>
             <motion.p
               variants={itemVariants}
-              className={`text-xl ${themeClasses.textSecondary} max-w-2xl mx-auto`}
+              className={`text-base sm:text-lg md:text-xl lg:text-2xl ${themeClasses.textSecondary} max-w-4xl mx-auto px-4 sm:px-0`}
             >
               Temukan berbagai produk dan layanan berkualitas dari 22 UMKM yang
               tersebar di 7 dusun di Kebonagung.
@@ -767,37 +787,41 @@ export default function UMKMKebonagungLanding() {
               whileInView="visible"
               viewport={{ once: true, amount: 0.3 }}
               variants={containerVariants}
-              className="mb-16"
+              className="mb-16 sm:mb-20 lg:mb-24"
             >
               <motion.h3
                 variants={itemVariants}
-                className={`text-3xl font-bold text-center mb-8 ${dusunData.color}`}
+                className={`text-2xl sm:text-3xl lg:text-4xl font-bold text-center mb-8 sm:mb-12 ${dusunData.color}`}
               >
                 Dusun {dusunData.dusun}
               </motion.h3>
               <motion.div
                 variants={containerVariants}
-                className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8"
               >
                 {dusunData.umkm.map((umkm, umkmIndex) => (
                   <motion.div key={umkmIndex} variants={itemVariants}>
                     <Card
-                      className={`${themeClasses.card} ${themeClasses.cardHover} transition-all duration-300`}
+                      className={`${themeClasses.card} ${themeClasses.cardHover} transition-all duration-300 h-full`}
                     >
-                      <CardContent className="p-6">
-                        <Badge className={`mb-3 ${umkm.badgeColor} text-white`}>
+                      <CardContent className="p-6 sm:p-8">
+                        <Badge
+                          className={`mb-4 sm:mb-6 ${umkm.badgeColor} text-white text-sm sm:text-base px-3 py-1`}
+                        >
                           {umkm.type}
                         </Badge>
                         <h4
-                          className={`text-xl font-bold mb-2 ${themeClasses.text}`}
+                          className={`text-xl sm:text-2xl font-bold mb-3 sm:mb-4 ${themeClasses.text}`}
                         >
                           {umkm.name}
                         </h4>
-                        <p className={`${themeClasses.textSecondary} mb-3`}>
+                        <p
+                          className={`${themeClasses.textSecondary} mb-4 sm:mb-6 text-base sm:text-lg leading-relaxed`}
+                        >
                           {umkm.description}
                         </p>
                         <div
-                          className={`space-y-2 text-sm ${themeClasses.textMuted} mb-4`}
+                          className={`space-y-2 sm:space-y-3 text-sm sm:text-base ${themeClasses.textMuted} mb-6`}
                         >
                           {umkm.details.map((detail, detailIndex) => (
                             <p key={detailIndex}>{detail}</p>
@@ -809,7 +833,7 @@ export default function UMKMKebonagungLanding() {
                             isDarkMode
                               ? "border-gray-600 text-white hover:bg-gray-700"
                               : "border-gray-300 text-gray-900 hover:bg-gray-100"
-                          } bg-transparent transition-colors duration-300`}
+                          } bg-transparent transition-colors duration-300 text-sm sm:text-base py-3 sm:py-4 h-auto`}
                         >
                           {umkm.contact}
                         </Button>
@@ -830,62 +854,82 @@ export default function UMKMKebonagungLanding() {
               isDarkMode
                 ? "bg-gradient-to-r from-blue-900/30 to-purple-900/30"
                 : "bg-gradient-to-r from-blue-100 to-purple-100"
-            } rounded-2xl p-8 text-center transition-colors duration-300`}
+            } rounded-2xl p-8 sm:p-12 text-center transition-colors duration-300`}
           >
-            <h3 className={`text-2xl font-bold mb-6 ${themeClasses.text}`}>
+            <h3
+              className={`text-2xl sm:text-3xl lg:text-4xl font-bold mb-8 sm:mb-12 ${themeClasses.text}`}
+            >
               Total UMKM Terdaftar
             </h3>
-            <div className="grid md:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-12">
               <div>
-                <div className="text-3xl font-bold text-blue-400 mb-2">22</div>
-                <div className={themeClasses.textSecondary}>UMKM Aktif</div>
+                <div className="text-3xl sm:text-4xl lg:text-5xl font-bold text-blue-400 mb-2 sm:mb-4">
+                  22
+                </div>
+                <div
+                  className={`${themeClasses.textSecondary} text-base sm:text-lg`}
+                >
+                  UMKM Aktif
+                </div>
               </div>
               <div>
-                <div className="text-3xl font-bold text-purple-400 mb-2">7</div>
-                <div className={themeClasses.textSecondary}>
+                <div className="text-3xl sm:text-4xl lg:text-5xl font-bold text-purple-400 mb-2 sm:mb-4">
+                  7
+                </div>
+                <div
+                  className={`${themeClasses.textSecondary} text-base sm:text-lg`}
+                >
                   Dusun Terlayani
                 </div>
               </div>
               <div>
-                <div className="text-3xl font-bold text-green-400 mb-2">
+                <div className="text-3xl sm:text-4xl lg:text-5xl font-bold text-green-400 mb-2 sm:mb-4">
                   27+
                 </div>
-                <div className={themeClasses.textSecondary}>
+                <div
+                  className={`${themeClasses.textSecondary} text-base sm:text-lg`}
+                >
                   Tahun Pengalaman
                 </div>
               </div>
               <div>
-                <div className="text-3xl font-bold text-yellow-400 mb-2">
+                <div className="text-3xl sm:text-4xl lg:text-5xl font-bold text-yellow-400 mb-2 sm:mb-4">
                   12
                 </div>
-                <div className={themeClasses.textSecondary}>Kategori Usaha</div>
+                <div
+                  className={`${themeClasses.textSecondary} text-base sm:text-lg`}
+                >
+                  Kategori Usaha
+                </div>
               </div>
             </div>
           </motion.div>
         </div>
       </section>
 
-      {/* Map Section */}
+      {/* Map Section - Fully Responsive */}
       <section
         id="peta"
-        className={`py-20 ${themeClasses.section} transition-colors duration-300`}
+        className={`py-12 sm:py-16 lg:py-20 ${themeClasses.section} transition-colors duration-300`}
       >
-        <div className="container mx-auto px-4">
+        <div className="w-full px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.5 }}
             variants={containerVariants}
-            className="text-center mb-16"
+            className="text-center mb-12 sm:mb-16 lg:mb-20"
           >
             <motion.div variants={itemVariants}>
-              <Badge className={`mb-4 ${themeClasses.badge.green}`}>
+              <Badge
+                className={`mb-6 sm:mb-8 ${themeClasses.badge.green} text-sm sm:text-base px-4 py-2 sm:px-6 sm:py-3`}
+              >
                 🗺️ Lokasi Desa
               </Badge>
             </motion.div>
             <motion.h2
               variants={itemVariants}
-              className={`text-4xl md:text-5xl font-bold mb-6 ${themeClasses.text}`}
+              className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 sm:mb-8 ${themeClasses.text} leading-tight`}
             >
               Peta Desa Kebonagung
               <br />
@@ -893,32 +937,36 @@ export default function UMKMKebonagungLanding() {
             </motion.h2>
             <motion.p
               variants={itemVariants}
-              className={`text-xl ${themeClasses.textSecondary} max-w-2xl mx-auto`}
+              className={`text-base sm:text-lg md:text-xl lg:text-2xl ${themeClasses.textSecondary} max-w-4xl mx-auto px-4 sm:px-0`}
             >
               Temukan lokasi strategis Desa Kebonagung dan jelajahi 7 dusun yang
               menjadi pusat aktivitas UMKM lokal.
             </motion.p>
           </motion.div>
 
-          <div className="grid lg:grid-cols-2 gap-12 items-center mb-16">
+          <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 items-center mb-12 sm:mb-16 lg:mb-20">
             {/* Map Container */}
             <motion.div
               initial={{ opacity: 0, x: -50 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, amount: 0.5 }}
               transition={{ duration: 0.8 }}
-              className="relative"
+              className="relative order-2 lg:order-1"
             >
               <div
-                className={`${themeClasses.card} rounded-2xl p-6 h-96 md:h-[500px] flex items-center justify-center transition-colors duration-300`}
+                className={`${themeClasses.card} rounded-2xl p-6 sm:p-8 h-80 sm:h-96 md:h-[500px] lg:h-[600px] flex items-center justify-center transition-colors duration-300`}
               >
                 {/* Placeholder for interactive map */}
                 <div className="text-center">
-                  <MapPin className="w-16 h-16 text-green-400 mx-auto mb-4" />
-                  <h3 className={`text-xl font-bold ${themeClasses.text} mb-2`}>
+                  <MapPin className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 text-green-400 mx-auto mb-4 sm:mb-6" />
+                  <h3
+                    className={`text-xl sm:text-2xl lg:text-3xl font-bold ${themeClasses.text} mb-3 sm:mb-4`}
+                  >
                     Peta Interaktif
                   </h3>
-                  <p className={`${themeClasses.textMuted} mb-4`}>
+                  <p
+                    className={`${themeClasses.textMuted} mb-4 sm:mb-6 text-base sm:text-lg`}
+                  >
                     Desa Kebonagung, Kecamatan Tegalrejo
                     <br />
                     Kabupaten Magelang, Jawa Tengah
@@ -926,7 +974,7 @@ export default function UMKMKebonagungLanding() {
                   <div
                     className={`${
                       isDarkMode ? "bg-green-900/30" : "bg-green-100"
-                    } text-green-400 px-4 py-2 rounded-lg inline-block transition-colors duration-300`}
+                    } text-green-400 px-4 sm:px-6 py-2 sm:py-3 rounded-lg inline-block transition-colors duration-300 text-sm sm:text-base`}
                   >
                     📍 Koordinat: -7.4469, 110.2968
                   </div>
@@ -934,19 +982,23 @@ export default function UMKMKebonagungLanding() {
               </div>
               {/* Map overlay with location info */}
               <div
-                className={`absolute top-8 left-8 ${
+                className={`absolute top-6 sm:top-8 left-6 sm:left-8 ${
                   isDarkMode ? "bg-black/80" : "bg-white/90"
-                } backdrop-blur-sm rounded-lg p-4 border ${
+                } backdrop-blur-sm rounded-lg p-4 sm:p-6 border ${
                   isDarkMode ? "border-gray-700" : "border-gray-200"
                 } transition-colors duration-300`}
               >
-                <div className="flex items-center space-x-2 mb-2">
-                  <Navigation className="w-4 h-4 text-blue-400" />
-                  <span className={`text-sm font-medium ${themeClasses.text}`}>
+                <div className="flex items-center space-x-2 sm:space-x-3 mb-2 sm:mb-3">
+                  <Navigation className="w-4 h-4 sm:w-5 sm:h-5 text-blue-400" />
+                  <span
+                    className={`text-sm sm:text-base font-medium ${themeClasses.text}`}
+                  >
                     Lokasi Desa
                   </span>
                 </div>
-                <p className={`text-xs ${themeClasses.textSecondary}`}>
+                <p
+                  className={`text-xs sm:text-sm ${themeClasses.textSecondary}`}
+                >
                   Jarak dari Magelang: ~15 km
                 </p>
               </div>
@@ -958,22 +1010,24 @@ export default function UMKMKebonagungLanding() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, amount: 0.5 }}
               transition={{ duration: 0.8 }}
-              className="space-y-6"
+              className="space-y-6 sm:space-y-8 order-1 lg:order-2"
             >
               <div>
                 <h3
-                  className={`text-2xl md:text-3xl font-bold ${themeClasses.text} mb-4`}
+                  className={`text-2xl sm:text-3xl lg:text-4xl font-bold ${themeClasses.text} mb-4 sm:mb-6`}
                 >
                   Informasi Geografis
                 </h3>
-                <p className={`${themeClasses.textSecondary} mb-6`}>
+                <p
+                  className={`${themeClasses.textSecondary} mb-6 sm:mb-8 text-base sm:text-lg leading-relaxed`}
+                >
                   Desa Kebonagung terletak di Kecamatan Tegalrejo, Kabupaten
                   Magelang, Jawa Tengah. Desa ini memiliki posisi strategis
                   dengan akses yang mudah ke berbagai wilayah sekitar.
                 </p>
               </div>
 
-              <div className="grid sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                 {[
                   {
                     icon: MapPin,
@@ -1004,16 +1058,20 @@ export default function UMKMKebonagungLanding() {
                   <motion.div
                     key={index}
                     variants={itemVariants}
-                    className={`${themeClasses.card} p-4 rounded-lg transition-colors duration-300`}
+                    className={`${themeClasses.card} p-4 sm:p-6 rounded-lg transition-colors duration-300`}
                   >
-                    <div className="flex items-center space-x-3 mb-2">
-                      <item.icon className={`w-5 h-5 ${item.color}`} />
-                      <span className={`font-semibold ${themeClasses.text}`}>
+                    <div className="flex items-center space-x-3 sm:space-x-4 mb-3 sm:mb-4">
+                      <item.icon
+                        className={`w-5 h-5 sm:w-6 sm:h-6 ${item.color}`}
+                      />
+                      <span
+                        className={`font-semibold ${themeClasses.text} text-base sm:text-lg`}
+                      >
                         {item.title}
                       </span>
                     </div>
                     <p
-                      className={`text-sm ${themeClasses.textSecondary} whitespace-pre-line`}
+                      className={`text-sm sm:text-base ${themeClasses.textSecondary} whitespace-pre-line`}
                     >
                       {item.content}
                     </p>
@@ -1027,18 +1085,20 @@ export default function UMKMKebonagungLanding() {
                   isDarkMode
                     ? "bg-gradient-to-r from-green-900/30 to-blue-900/30"
                     : "bg-gradient-to-r from-green-100 to-blue-100"
-                } rounded-lg p-6 border ${
+                } rounded-lg p-6 sm:p-8 border ${
                   isDarkMode ? "border-gray-700" : "border-gray-200"
                 } transition-colors duration-300`}
               >
-                <h4 className={`text-lg font-bold ${themeClasses.text} mb-3`}>
+                <h4
+                  className={`text-lg sm:text-xl lg:text-2xl font-bold ${themeClasses.text} mb-4 sm:mb-6`}
+                >
                   7 Dusun di Kebonagung
                 </h4>
-                <div className="grid grid-cols-2 gap-2 text-sm">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 text-sm sm:text-base">
                   {umkmData.map((dusun, index) => (
-                    <div key={index} className="flex items-center space-x-2">
+                    <div key={index} className="flex items-center space-x-3">
                       <div
-                        className={`w-2 h-2 rounded-full ${dusun.color.replace(
+                        className={`w-3 h-3 rounded-full ${dusun.color.replace(
                           "text-",
                           "bg-"
                         )}`}
@@ -1059,7 +1119,7 @@ export default function UMKMKebonagungLanding() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.5 }}
             transition={{ duration: 0.8 }}
-            className="grid sm:grid-cols-2 md:grid-cols-4 gap-6"
+            className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8"
           >
             {[
               { value: "7", label: "Dusun", color: "text-blue-400" },
@@ -1077,12 +1137,16 @@ export default function UMKMKebonagungLanding() {
             ].map((stat, index) => (
               <div
                 key={index}
-                className={`${themeClasses.card} rounded-lg p-6 text-center transition-colors duration-300`}
+                className={`${themeClasses.card} rounded-lg p-6 sm:p-8 text-center transition-colors duration-300`}
               >
-                <div className={`text-2xl font-bold ${stat.color} mb-2`}>
+                <div
+                  className={`text-2xl sm:text-3xl lg:text-4xl font-bold ${stat.color} mb-2 sm:mb-4`}
+                >
                   {stat.value}
                 </div>
-                <div className={`${themeClasses.textSecondary} text-sm`}>
+                <div
+                  className={`${themeClasses.textSecondary} text-sm sm:text-base lg:text-lg`}
+                >
                   {stat.label}
                 </div>
               </div>
@@ -1091,19 +1155,22 @@ export default function UMKMKebonagungLanding() {
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section className="py-20">
-        <div id="testimonials" className="container mx-auto px-4">
+      {/* Testimonials - Fully Responsive */}
+      <section className="py-12 sm:py-16 lg:py-20">
+        <div
+          id="testimonials"
+          className="w-full px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto"
+        >
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.5 }}
             variants={containerVariants}
-            className="text-center mb-16"
+            className="text-center mb-12 sm:mb-16 lg:mb-20"
           >
             <motion.h2
               variants={itemVariants}
-              className={`text-4xl md:text-5xl font-bold mb-6 ${themeClasses.text}`}
+              className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 sm:mb-8 ${themeClasses.text} leading-tight`}
             >
               Apa Kata
               <br />
@@ -1115,7 +1182,7 @@ export default function UMKMKebonagungLanding() {
             whileInView="visible"
             viewport={{ once: true, amount: 0.3 }}
             variants={containerVariants}
-            className="grid md:grid-cols-3 gap-8"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-10"
           >
             {[
               {
@@ -1142,25 +1209,31 @@ export default function UMKMKebonagungLanding() {
             ].map((testimonial, index) => (
               <motion.div key={index} variants={itemVariants}>
                 <Card
-                  className={`${themeClasses.card} transition-colors duration-300`}
+                  className={`${themeClasses.card} transition-colors duration-300 h-full`}
                 >
-                  <CardContent className="p-8">
-                    <div className="flex mb-4">
+                  <CardContent className="p-6 sm:p-8 lg:p-10">
+                    <div className="flex mb-4 sm:mb-6">
                       {[...Array(testimonial.rating)].map((_, i) => (
                         <Star
                           key={i}
-                          className="w-5 h-5 text-yellow-400 fill-current"
+                          className="w-5 h-5 sm:w-6 sm:h-6 text-yellow-400 fill-current"
                         />
                       ))}
                     </div>
-                    <p className={`${themeClasses.textSecondary} mb-6 italic`}>
+                    <p
+                      className={`${themeClasses.textSecondary} mb-6 sm:mb-8 italic text-base sm:text-lg leading-relaxed`}
+                    >
                       "{testimonial.content}"
                     </p>
                     <div>
-                      <p className={`font-bold ${themeClasses.text}`}>
+                      <p
+                        className={`font-bold ${themeClasses.text} text-base sm:text-lg`}
+                      >
                         {testimonial.name}
                       </p>
-                      <p className={`text-sm ${themeClasses.textMuted}`}>
+                      <p
+                        className={`text-sm sm:text-base ${themeClasses.textMuted}`}
+                      >
                         {testimonial.business}
                       </p>
                     </div>
@@ -1172,21 +1245,21 @@ export default function UMKMKebonagungLanding() {
         </div>
       </section>
 
-      {/* CTA Section */}
+      {/* CTA Section - Fully Responsive */}
       <section
-        className={`py-16 md:py-20 ${
+        className={`py-12 sm:py-16 lg:py-20 ${
           isDarkMode
             ? "bg-gradient-to-r from-blue-900/50 to-purple-900/50"
             : "bg-gradient-to-r from-blue-100 to-purple-100"
         } transition-colors duration-300`}
       >
-        <div className="container mx-auto px-4 text-center">
+        <div className="w-full px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto text-center">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.5 }}
             transition={{ duration: 0.6 }}
-            className={`text-3xl sm:text-4xl md:text-5xl font-bold mb-4 md:mb-6 ${themeClasses.text}`}
+            className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 sm:mb-8 ${themeClasses.text} leading-tight`}
           >
             Siap Mengembangkan
             <br />
@@ -1197,7 +1270,7 @@ export default function UMKMKebonagungLanding() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.5 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className={`text-lg md:text-xl ${themeClasses.textSecondary} mb-6 md:mb-8 max-w-2xl mx-auto px-4`}
+            className={`text-base sm:text-lg md:text-xl lg:text-2xl ${themeClasses.textSecondary} mb-8 sm:mb-12 max-w-3xl mx-auto px-4 sm:px-0`}
           >
             Bergabunglah dengan ratusan UMKM di Desa Kebonagung yang telah
             merasakan manfaat platform digital kami.
@@ -1207,11 +1280,11 @@ export default function UMKMKebonagungLanding() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.5 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center mb-6 md:mb-8 max-w-md mx-auto"
+            className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center mb-8 sm:mb-12 max-w-lg mx-auto"
           >
             <Input
               placeholder="Masukkan email Anda"
-              className={`${themeClasses.input} text-sm md:text-base transition-colors duration-300`}
+              className={`${themeClasses.input} text-base sm:text-lg transition-colors duration-300 py-4 sm:py-5 h-auto`}
             />
           </motion.div>
           <motion.p
@@ -1219,45 +1292,57 @@ export default function UMKMKebonagungLanding() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.5 }}
             transition={{ duration: 0.6, delay: 0.6 }}
-            className={`text-xs md:text-sm ${themeClasses.textMuted}`}
+            className={`text-sm sm:text-base ${themeClasses.textMuted}`}
           >
             Gratis untuk memulai. Tidak ada biaya tersembunyi.
           </motion.p>
         </div>
       </section>
 
-      {/* Footer */}
+      {/* Footer - Fully Responsive */}
       <footer
         id="kontak"
-        className={`${themeClasses.footer} py-16 transition-colors duration-300`}
+        className={`${themeClasses.footer} py-12 sm:py-16 lg:py-20 transition-colors duration-300`}
       >
-        <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-4 gap-8">
-            <div>
-              <div className="flex items-center space-x-2 mb-4">
-                <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-sm">K</span>
+        <div className="w-full px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-12">
+            <div className="lg:col-span-1">
+              <div className="flex items-center space-x-3 mb-6 sm:mb-8">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                  <span className="text-white font-bold text-base sm:text-lg">
+                    K
+                  </span>
                 </div>
-                <span className={`font-bold text-xl ${themeClasses.text}`}>
+                <span
+                  className={`font-bold text-xl sm:text-2xl lg:text-3xl ${themeClasses.text}`}
+                >
                   Kebonagung
                 </span>
               </div>
-              <p className={`${themeClasses.textMuted} mb-4`}>
+              <p
+                className={`${themeClasses.textMuted} mb-6 sm:mb-8 text-base sm:text-lg leading-relaxed`}
+              >
                 Platform digital untuk mengembangkan UMKM di Desa Kebonagung
                 dengan teknologi modern dan strategi terpadu.
               </p>
-              <div className="flex space-x-4">
+              <div className="flex space-x-4 sm:space-x-6">
                 <Facebook
-                  className={`w-5 h-5 ${themeClasses.textMuted} hover:text-blue-400 cursor-pointer transition-colors duration-300`}
+                  className={`w-6 h-6 sm:w-7 sm:h-7 ${themeClasses.textMuted} hover:text-blue-400 cursor-pointer transition-colors duration-300`}
                 />
                 <Instagram
-                  className={`w-5 h-5 ${themeClasses.textMuted} hover:text-pink-400 cursor-pointer transition-colors duration-300`}
+                  className={`w-6 h-6 sm:w-7 sm:h-7 ${themeClasses.textMuted} hover:text-pink-400 cursor-pointer transition-colors duration-300`}
                 />
               </div>
             </div>
             <div>
-              <h4 className={`font-bold ${themeClasses.text} mb-4`}>Layanan</h4>
-              <ul className={`space-y-2 ${themeClasses.textMuted}`}>
+              <h4
+                className={`font-bold ${themeClasses.text} mb-6 sm:mb-8 text-lg sm:text-xl lg:text-2xl`}
+              >
+                Layanan
+              </h4>
+              <ul
+                className={`space-y-3 sm:space-y-4 ${themeClasses.textMuted} text-base sm:text-lg`}
+              >
                 {[
                   "Pendaftaran UMKM",
                   "Pelatihan Digital",
@@ -1276,10 +1361,14 @@ export default function UMKMKebonagungLanding() {
               </ul>
             </div>
             <div>
-              <h4 className={`font-bold ${themeClasses.text} mb-4`}>
+              <h4
+                className={`font-bold ${themeClasses.text} mb-6 sm:mb-8 text-lg sm:text-xl lg:text-2xl`}
+              >
                 Dukungan
               </h4>
-              <ul className={`space-y-2 ${themeClasses.textMuted}`}>
+              <ul
+                className={`space-y-3 sm:space-y-4 ${themeClasses.textMuted} text-base sm:text-lg`}
+              >
                 {["Pusat Bantuan", "Tutorial", "FAQ", "Kontak Support"].map(
                   (item, index) => (
                     <li key={index}>
@@ -1295,20 +1384,26 @@ export default function UMKMKebonagungLanding() {
               </ul>
             </div>
             <div>
-              <h4 className={`font-bold ${themeClasses.text} mb-4`}>Kontak</h4>
-              <div className={`space-y-3 ${themeClasses.textMuted}`}>
-                <div className="flex items-center">
-                  <MapPin className="w-5 h-5 mr-3" />
+              <h4
+                className={`font-bold ${themeClasses.text} mb-6 sm:mb-8 text-lg sm:text-xl lg:text-2xl`}
+              >
+                Kontak
+              </h4>
+              <div
+                className={`space-y-4 sm:space-y-6 ${themeClasses.textMuted} text-base sm:text-lg`}
+              >
+                <div className="flex items-start">
+                  <MapPin className="w-5 h-5 sm:w-6 sm:h-6 mr-3 sm:mr-4 mt-1 flex-shrink-0" />
                   <span>
                     Desa Kebonagung, Kecamatan Tegalrejo Kabupaten Magelang
                   </span>
                 </div>
                 <div className="flex items-center">
-                  <Phone className="w-5 h-5 mr-3" />
+                  <Phone className="w-5 h-5 sm:w-6 sm:h-6 mr-3 sm:mr-4" />
                   <span>+62 274 123 4567</span>
                 </div>
                 <div className="flex items-center">
-                  <Mail className="w-5 h-5 mr-3" />
+                  <Mail className="w-5 h-5 sm:w-6 sm:h-6 mr-3 sm:mr-4" />
                   <span>info@umkmkebonagung.id</span>
                 </div>
               </div>
@@ -1317,11 +1412,11 @@ export default function UMKMKebonagungLanding() {
           <div
             className={`border-t ${
               isDarkMode ? "border-gray-800" : "border-gray-300"
-            } mt-12 pt-8 text-center ${
+            } mt-12 sm:mt-16 lg:mt-20 pt-8 sm:pt-12 text-center ${
               themeClasses.textMuted
             } transition-colors duration-300`}
           >
-            <p>
+            <p className="text-sm sm:text-base lg:text-lg">
               &copy; 2024 UMKM Kebonagung. Semua hak dilindungi undang-undang.
             </p>
           </div>
