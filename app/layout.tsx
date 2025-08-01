@@ -6,8 +6,7 @@ import "./globals.css";
 export const metadata = {
   title: "UMKM Desa Kebonagung",
   description:
-    "Platform digital untuk memajukan UMKM di Desa Kebonagung, Kecamatan Tegalrejo, Kabupaten Magelang.", // Deskripsi baru
-  // Hapus baris 'generator: "v0.dev",' jika Anda tidak ingin menampilkannya
+    "Platform digital untuk memajukan UMKM di Desa Kebonagung, Kecamatan Tegalrejo, Kabupaten Magelang.", 
   icons: {
     icon: "/images/KKN.jpeg",
   },
